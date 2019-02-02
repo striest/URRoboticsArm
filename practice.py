@@ -54,13 +54,22 @@ def get_positions(servoangles):
         #print(t_e)
     print("m1-m5")
     #print(t_e)
+
+    final_positions = [t_e[0][3], t_e[1][3], t_e[2][3]]
+
     print("x: " + str(t_e[0][3]) +  ", y: " + str(t_e[1][3]) + ", z: " + str(t_e[2][3]))
+
+    return final_positions
 
 pi = np.pi
 
-for i in range(0, 180):
-    for j in range(0, 180):
-        for k in range(0, 180):
+csv_file_object = open("vertices.csv", "w")
+csv_file_object.write("ID, ")
+csv_file_object.write("\n")
+
+for i in range(0, 30):
+    for j in range(0, 30):
+        for k in range(0, 30):
             print("-"*15)
             deg_servoangles = [i, j, k]
             print(deg_servoangles)
@@ -71,4 +80,10 @@ for i in range(0, 180):
 
             servoangles = [rad_i, rad_j, rad_k]
             #print(servoangles)
-            get_positions(servoangles)
+            positions = get_positions(servoangles)
+
+            csv_str = "nodeID,{!s},{!s},{!s},{!s},{!s},{!s}".format(deg_servoangles[0], deg_servoangles[1], deg_servoangles[2], positions[0], positions[1], positions[2])
+            csv_file_object.write(csv_str)
+            csv_file_object.write("\n")
+
+csv_file_object.close()
