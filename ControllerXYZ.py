@@ -10,8 +10,12 @@ def getXYZ():
         print(event.ev_type, event.code, event.state)
 
 def main():
-
     while 1:
         getXYZ()
+<<<<<<< HEAD
 if __name__ == '__main__':
 	main()
+=======
+
+if __name__ == '__main__':
+    main()
