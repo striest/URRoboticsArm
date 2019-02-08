@@ -1,0 +1,36 @@
+import inputs
+
+"""
+Returns an x,y,z vector from the current controller inputs.
+"""
+
+def getXYZ(previous_coord):
+    speed = 0.3
+
+    events = inputs.get_gamepad()
+    gradient = [0,0,0]
+
+    for event in events:
+        type = str(event.ev_type)
+        state = str(event.state)
+        code = int(event.code)
+
+        if (event.ev_type == "Absolute"):
+            code = (code - 127.5) / 127.5 * speed
+
+        if (event.state == "ABS_X"):
+            gradient[0] = code
+        if (event.state == "ABS_Y"):
+            gradient[1] = -code
+        if (event.state == "ABS_RZ"):
+            gradient[2] = code
+
+    return gradient + current_coord
+
+def main():
+    while 1:
+        current_coord = [0,0,0]
+        print(getXYZ(current_coord))
+
+if __name__ == '__main__':
+    main()
