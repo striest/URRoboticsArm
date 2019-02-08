@@ -28,7 +28,7 @@ def createHTM(a, alpha, d, theta):
   Applied as: Rotate theta arounnd z0, translate along z, translate along x, rotate alpha around new x
   """
   t_matrix = np.zeros((4, 4))
-  
+
   t_matrix[0][0] = cos(theta)
   t_matrix[0][1] = -sin(theta)*cos(alpha)
   t_matrix[0][2] = sin(theta)*sin(alpha)
@@ -45,7 +45,7 @@ def createHTM(a, alpha, d, theta):
   t_matrix[3][1] = 0
   t_matrix[3][2] = 0
   t_matrix[3][3] = 1
-  
+
   return t_matrix
 
 theta1 = 0

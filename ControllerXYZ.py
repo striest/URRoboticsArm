@@ -13,3 +13,5 @@ def main():
 
     while 1:
         getXYZ()
+if __name__ == '__main__':
+	main()
