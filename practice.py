@@ -1,7 +1,10 @@
 #Writing some code just to start with the math
 import numpy as np;
+import pandas as pd;
 from numpy import cos as cos
 from numpy import sin as sin
+
+from Graph import *
 
 def createHTM(a, alpha, d, theta):
   """
@@ -63,27 +66,43 @@ def get_positions(servoangles):
 
 pi = np.pi
 
+
+'''
 csv_file_object = open("vertices.csv", "w")
-csv_file_object.write("ID, ")
+csv_file_object.write("nodeID,theta1,theta2,theta3,x,y,z")
 csv_file_object.write("\n")
 
-for i in range(0, 30):
-    for j in range(0, 30):
-        for k in range(0, 30):
-            print("-"*15)
-            deg_servoangles = [i, j, k]
-            print(deg_servoangles)
+for i in range(0, 181):
+    for j in range(0, 181):
+        for k in range(0, 181):
+            if (i % 5 == 0 and j % 5 == 0 and k % 5 == 0):
+                print("-"*15)
+                deg_servoangles = [i, j, k]
+                print(deg_servoangles)
 
-            rad_i = i * pi/180
-            rad_j = j * pi/180
-            rad_k = k * pi/180
+                rad_i = i * pi/180
+                rad_j = j * pi/180
+                rad_k = k * pi/180
 
-            servoangles = [rad_i, rad_j, rad_k]
-            #print(servoangles)
-            positions = get_positions(servoangles)
+                servoangles = [rad_i, rad_j, rad_k]
+                #print(servoangles)
+                positions = get_positions(servoangles)
 
-            csv_str = "nodeID,{!s},{!s},{!s},{!s},{!s},{!s}".format(deg_servoangles[0], deg_servoangles[1], deg_servoangles[2], positions[0], positions[1], positions[2])
-            csv_file_object.write(csv_str)
-            csv_file_object.write("\n")
+                nodeID = "nodeID" + "+" + str(deg_servoangles[0]) + "+" + str(deg_servoangles[1]) + "+" + str(deg_servoangles[2]);
+
+                csv_str = "{},{!s},{!s},{!s},{!s},{!s},{!s}".format(nodeID, deg_servoangles[0], deg_servoangles[1], deg_servoangles[2], round(positions[0], 1), round(positions[1], 1), round(positions[2], 1))
+                csv_file_object.write(csv_str)
+                csv_file_object.write("\n")
 
 csv_file_object.close()
+'''
+
+verticesDF = pd.read_csv("vertices.csv")
+countDF = verticesDF.groupby(['x', 'y', 'z'])['theta1'].count()
+countDF = countDF.reset_index()
+
+print("finished groupby")
+
+graph = Graph("robot arm")
+graph.initialize(verticesDF)
+graph.create_edges()
