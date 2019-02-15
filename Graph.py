@@ -28,9 +28,9 @@ class Vertex:
         distance = np.linalg.norm(a-b)
 
         if distance <= change and self.nodeID != v2.nodeID:
-            return True
+            return distance
         else:
-            return False
+            return -1
 
 
 class Graph:
@@ -53,12 +53,32 @@ class Graph:
 
     def create_edges(self):
 
+        count  = 0
+
         for key in self.graph_map:
             v1 = self.id_map[key]
             for v2 in self.vertices:
-                if v1.within_threshold(v2, 5):
+                if v1.within_threshold(v2, 5) != -1:
                     tempList = self.graph_map[v1.nodeID]
                     tempList.append(v2)
                     self.graph_map[v1.nodeID] = tempList
+                    count = count + 1
 
-            ###print(v1.nodeID + " " + str(len(self.graph_map[v1.nodeID])))
+        print(count)
+
+    def write_edges_to_csv(self, csvFile):
+        csv_file_object = open(csvFile, "w")
+        csv_file_object.write("v1_nodeID,v2_nodeID,distance")
+        csv_file_object.write("\n")
+
+        for key in self.graph_map:
+            v1 = self.id_map[key]
+            '''
+            for v2 in self.vertices:
+                if v1.within_threshold(v2, 5) != -1:
+                    csv_str = "{},{},{!s}".format(v1.nodeID, v2.nodeID, round(v1.within_threshold(v2, 5), 3))
+                    csv_file_object.write(csv_str)
+                    csv_file_object.write("\n")
+            '''
+
+            
