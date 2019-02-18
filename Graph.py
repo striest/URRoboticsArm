@@ -62,7 +62,6 @@ class Vertex:
         return list
 
 
-
 class Graph:
 
     def __init__(self, name):
@@ -82,6 +81,30 @@ class Graph:
             self.id_map[v.nodeID] = v
 
         print("finished initialize")
+
+    def build_graph(self):
+
+        count = 0
+
+        for key in self.graph_map:
+            v1 = self.id_map[key]
+
+            nearby_vertices = v1.get_nearby_vertices(5)
+
+            for v2_nodeID in nearby_vertices:
+                if v1.nodeID != v2_nodeID:
+                    v2 = self.id_map[v2_nodeID]
+
+                    tempList = self.graph_map[v1.nodeID]
+                    tempList.append(v2)
+                    self.graph_map[v1.nodeID] = tempList
+
+                    count += 1
+
+                    if count % 1000 == 0:
+                        print("edge count: " + str(count))
+
+        print("finished building graph")
 
     def create_edges_raw(self):
 
@@ -116,14 +139,14 @@ class Graph:
                     csv_file_object.write(csv_str)
                     csv_file_object.write("\n")
 
-            count = count + 1
+                    count = count + 1
 
-            if count % 1000 == 0:
-                print("write count: " + str(count))
+                    if count % 1000 == 0:
+                        print("write count: " + str(count))
 
         print("finished writing edges to csv")
 
-    def build_graph(self, edges_csv):
+    def build_graph_from_file(self, edges_csv):
         edgesDF = pd.read_csv("edges.csv")
 
         for index, row in edgesDF.iterrows():

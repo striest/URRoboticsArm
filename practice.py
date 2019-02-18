@@ -93,9 +93,9 @@ def write_vertices_to_csv(csv_file):
                     csv_file_object.write(csv_str)
                     csv_file_object.write("\n")
 
-                    csv_file_object.close()
+    csv_file_object.close()
 
-###write_vertices_to_csv("vertices.csv")
+#write_vertices_to_csv("vertices.csv")
 
 verticesDF = pd.read_csv("vertices.csv")
 countDF = verticesDF.groupby(['x', 'y', 'z'])['theta1'].count()
@@ -105,5 +105,6 @@ print("finished groupby")
 
 graph = Graph("robot arm")
 graph.initialize(verticesDF)
-graph.write_edges_to_csv("edges.csv")
-graph.build_graph("edges.csv")
+#graph.write_edges_to_csv("edges.csv")
+#graph.build_graph_from_file("edges.csv")
+graph.build_graph()
