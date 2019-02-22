@@ -21,17 +21,21 @@ class Vertex:
         return self.nodeID == v2.nodeID
 
     def within_threshold(self, v2, s):
-        a = np.array([self.theta1, self.theta2, self.theta3])
-        b = np.array([v2.theta1, v2.theta2, v2.theta3])
+
+        distance = self.get_euclidean(v2)
 
         change = (3 * s * s + 1) ** .5
-
-        distance = np.linalg.norm(a-b)
 
         if distance <= change and self.nodeID != v2.nodeID:
             return distance
         else:
             return -1
+
+    def get_euclidean(self, v2):
+            a = np.array([self.theta1, self.theta2, self.theta3])
+            b = np.array([v2.theta1, v2.theta2, v2.theta3])
+
+            distance = np.linalg.norm(a-b)
 
     def get_nearby_vertices(self, s):
 
@@ -165,3 +169,14 @@ class Graph:
                 print("build count: " + str(index))
 
         print("finished building graph")
+
+    def dfs(self, v1, v2):
+
+        nearby_vertices = self.graph_map[v1.nodeID];
+
+        min_distance = 10000
+
+        min_v2 = v1
+
+        for v1 in nearby_vertices:
+            
