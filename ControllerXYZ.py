@@ -1,13 +1,13 @@
 import inputs
 from decimal import Decimal
 
-"""
-Returns an x,y,z vector from the current controller inputs.
-"""
-
 def getXYZ(prev_coord, prev_gradient):
-    speed = 0.1
-    null_zone = 0
+    """
+    Returns an integer x,y,z vector from the current controller inputs.
+    Allows for continuous controller inputs, or simulates that at least.
+    """
+    speed = 0.1             # Controls the speed the controller outputs change.
+    null_zone = 0           # Controls the null margin for the controller.
 
     events = inputs.get_gamepad()
     gradient = prev_gradient
@@ -43,7 +43,7 @@ def main():
     gradient = [0,0,0]
     while 1:
         coord, gradient = getXYZ(coord, gradient)
-
+        print(coord, gradient)
 
 if __name__ == '__main__':
 	main()
