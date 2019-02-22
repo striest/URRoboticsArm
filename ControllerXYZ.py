@@ -20,6 +20,7 @@ def getXYZ(prev_coord, prev_gradient):
 
         if (type == "Absolute"):
             state = (state - 127.5) / 127.5 * speed
+            state = int(round(state, 1) * 10)
 
             if (abs(state) < null_zone):
                 state = 0
@@ -41,7 +42,8 @@ def main():
     coord = [0,0,0]
     gradient = [0,0,0]
     while 1:
-        getXYZ()
+        coord, gradient = getXYZ(coord, gradient)
+
 
 if __name__ == '__main__':
 	main()
