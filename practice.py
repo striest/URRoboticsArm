@@ -112,9 +112,9 @@ graph.build_graph()
 v1 = graph.id_map["nodeID+110+50+70"]
 v2 = graph.id_map["nodeID+75+55+170"]
 
-path = []
-
-graph.dfs(v1, v2, path)
+path = graph.dfs(v1, v2)
+path = [v1] + path
+del path[-1]
 
 for v in path:
-    print(v1.nodeID)
+    print(v.nodeID)

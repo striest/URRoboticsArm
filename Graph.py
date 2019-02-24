@@ -15,7 +15,7 @@ class Vertex:
         self.z = z
 
     def __repr__(self):
-        return 'Point(name: %s, x=%s, y=%s, z = %s)' % (self.nodeID, self.x, self.y, self.z)
+        return 'Point(name: %s, t1=%s, t2=%s, t3=%s, x=%s, y=%s, z = %s)' % (self.nodeID, self.theta1, self.theta2, self.theta3, self.x, self.y, self.z)
 
     def __eq__(self, v2):
         return self.nodeID == v2.nodeID
@@ -24,7 +24,7 @@ class Vertex:
 
         distance = self.get_euclidean(v2)
 
-        change = (3 * s * s + 1) ** .5
+        change = (3 * s * s) ** .5
 
         if distance <= change and self.nodeID != v2.nodeID:
             return distance
@@ -35,7 +35,9 @@ class Vertex:
             a = np.array([self.theta1, self.theta2, self.theta3])
             b = np.array([v2.theta1, v2.theta2, v2.theta3])
 
-            distance = np.linalg.norm(a-b)
+            distance = ((a[0] - b[0])**2 + (a[1] - b[1])**2 + (a[2] - b[2])**2)**.5
+
+            return distance
 
     def get_nearby_vertices(self, s):
 
@@ -170,9 +172,7 @@ class Graph:
 
         print("finished building graph")
 
-    def dfs(self, v1, v2, visited_nodes):
-
-        visited_nodes.append(v1)
+    def dfs(self, v1, v2):
 
         nearby_vertices = self.graph_map[v1.nodeID];
 
@@ -182,15 +182,12 @@ class Graph:
 
         for v in nearby_vertices:
             distance = v.get_euclidean(v2)
-
             if distance < min_distance:
                 min_distance = distance
                 min_distance_vertex = v
 
-        print(v1.nodeID)
-
-
         if v1.nodeID == v2.nodeID:
-            return 0;
+            return [v2];
         else:
-            return self.dfs(min_distance_vertex, v2, visited_nodes)
+            print(min_distance_vertex)
+            return [min_distance_vertex] + self.dfs(min_distance_vertex, v2)
