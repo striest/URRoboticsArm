@@ -108,3 +108,13 @@ graph.initialize(verticesDF)
 #graph.write_edges_to_csv("edges.csv")
 #graph.build_graph_from_file("edges.csv")
 graph.build_graph()
+
+v1 = graph.id_map["nodeID+110+50+70"]
+v2 = graph.id_map["nodeID+75+55+170"]
+
+path = []
+
+graph.dfs(v1, v2, path)
+
+for v in path:
+    print(v1.nodeID)

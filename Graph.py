@@ -105,8 +105,8 @@ class Graph:
 
                     count += 1
 
-                    if count % 1000 == 0:
-                        print("edge count: " + str(count))
+                    #if count % 1000 == 0:
+                        #print("edge count: " + str(count))
 
         print("finished building graph")
 
@@ -170,13 +170,27 @@ class Graph:
 
         print("finished building graph")
 
-    def dfs(self, v1, v2):
+    def dfs(self, v1, v2, visited_nodes):
+
+        visited_nodes.append(v1)
 
         nearby_vertices = self.graph_map[v1.nodeID];
 
         min_distance = 10000
 
-        min_v2 = v1
+        min_distance_vertex = v1
 
-        for v1 in nearby_vertices:
-            
+        for v in nearby_vertices:
+            distance = v.get_euclidean(v2)
+
+            if distance < min_distance:
+                min_distance = distance
+                min_distance_vertex = v
+
+        print(v1.nodeID)
+
+
+        if v1.nodeID == v2.nodeID:
+            return 0;
+        else:
+            return self.dfs(min_distance_vertex, v2, visited_nodes)
