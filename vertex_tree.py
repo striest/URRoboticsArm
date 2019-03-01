@@ -161,12 +161,32 @@ def main():
 	for p in path:
 		print(p)
 
-	x = 0
-	y = 0
-	z = 0
+	x, x_prev, gx_prev = 0
+	y, y_prev, gy_prev = 0
+	z, z_prev, gz_prev = 0
+	p_node = tree_lookup(root, x, y, z, k=10)
+	p_thetas = p_node.data
+	p_nodestr = 'nodeID+{}+{}+{}'.format(p_thetas[0], p_thetas2[1], p_thetas[2])
 	while True:
-		(x, y, z), _ = getXYZ()
+		(x, y, z), (gx, gy, gz) = getXYZ((x, y, z), (gx_prev, gy_prev, gz_prev))
 		print('x:{}, y:{}, z{}'.format(x, y, z))
+
+		c_node = tree_lookup(root, x, y, z, k=10)
+		thetas = c_node.data
+		c_nodestr = 'nodeID+{}+{}+{}'.format(c_thetas[0], c_thetas[1], c_thetas[2])
+
+		path = graph.dfs(graph.id_map[p_nodestr], graph.id_map[c_nodestr])
+
+
+		print('Node1=', nodestr)
+		print('Node2=', nodestr2)
+
+		for p in path:
+		print(p)
+
+		(x_prev, y_prev, z_prev) = (x, y, z)
+		(gx_prev, gy_prev, gz_prev) = (gx, gy, gz)
+		p_node = c_node
 
 if __name__ == '__main__':
 	main()
