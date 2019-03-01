@@ -32,15 +32,15 @@ def getXYZ(prev_coord, prev_gradient):
             elif (code == "ABS_RZ"):
                 gradient[2] = -state
 
-    new_coord = [0,0,0]
+    new_coord = (0,0,0)
     for i in range(3):
         new_coord[i] = prev_coord[i] + gradient[i]
 
     return new_coord, gradient
 
 def main():
-    coord = [0,0,0]
-    gradient = [0,0,0]
+    coord = (0,0,0)
+    gradient = (0,0,0)
     while 1:
         coord, gradient = getXYZ(coord, gradient)
         print(coord, gradient)
