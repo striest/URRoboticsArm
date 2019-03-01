@@ -105,8 +105,6 @@ print("finished groupby")
 
 graph = Graph("robot arm")
 graph.initialize(verticesDF)
-#graph.write_edges_to_csv("edges.csv")
-#graph.build_graph_from_file("edges.csv")
 graph.build_graph()
 
 v1 = graph.id_map["nodeID+110+50+70"]
