@@ -1,5 +1,7 @@
 import math
 import pandas as pd
+from Graph import *
+from ControllerXYZ import *
 
 class V_Node:
 	def __init__(self, val, data, parent):
@@ -119,12 +121,52 @@ def main():
 	# print('_'*50)
 	# print(root.lookup_child(-3, 3))
 
+	#SETUP
+
+	verticesDF = pd.read_csv("vertices.csv")
+	countDF = verticesDF.groupby(['x', 'y', 'z'])['theta1'].count()
+	countDF = countDF.reset_index()
+
+	print("finished groupby")
+
+	graph = Graph("robot arm")
+	graph.initialize(verticesDF)
+	graph.build_graph()
+	
 	root = load_from_csv('vertices.csv')
 	print('\n')
-	root.preorder()
+	# root.preorder()
 	# print(root.countnodes())
 	# print(root.children)
-	print(tree_lookup(root, -2, -2, 8, 10))
+
+
+	#RUN
+
+	v = tree_lookup(root, -2, -2, 8, 10)
+
+	thetas = v.data
+	nodestr = 'nodeID+{}+{}+{}'.format(thetas[0], thetas[1], thetas[2])
+
+	print('Node1=', nodestr)
+
+	v2 = tree_lookup(root, 0, -4, 4, 10)
+
+	thetas2 = v2.data
+	nodestr2 = 'nodeID+{}+{}+{}'.format(thetas2[0], thetas2[1], thetas2[2])
+
+	print('Node2=', nodestr2)
+
+	print('Path=')
+	path = graph.dfs(graph.id_map[nodestr], graph.id_map[nodestr2])
+	for p in path:
+		print(p)
+
+	x = 0
+	y = 0
+	z = 0
+	while True:
+		(x, y, z), _ = getXYZ()
+		print('x:{}, y:{}, z{}'.format(x, y, z))
 
 if __name__ == '__main__':
 	main()

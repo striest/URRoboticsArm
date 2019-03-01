@@ -189,5 +189,4 @@ class Graph:
         if v1.nodeID == v2.nodeID:
             return [v2];
         else:
-            print(min_distance_vertex)
             return [min_distance_vertex] + self.dfs(min_distance_vertex, v2)
