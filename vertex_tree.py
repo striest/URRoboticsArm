@@ -7,7 +7,11 @@ from ControllerXYZ import *
 class V_Node:
 	def __init__(self, val, data, parent):
 		"""
-		Initializes a vertex_node. Stores position value according to tree depth, and a pointer to parent to reconstruct the full position.
+		Initializes a V_node.
+		Stores:
+			1. A position value according to tree depthself.
+			2. A pointer to this V_Node's parent to reconstruct the full position.
+			3.
 		"""
 		self.val = val
 		self.parent = parent
@@ -16,19 +20,18 @@ class V_Node:
 
 	def lookup_child(self, val, k=1):
 		"""
-		Returns the top-k children of this vertex whose values are closest to the given value, and their distances to the value
+		Returns this V_node's top-k children with values closest to the given value.
+		Also returns the children's distances to the given value.
 		"""
+		top_k = [(None, float('inf'))]*k # Start with k 2-tuples with infinite value. Always sort this.
 
-		#always sort this.
-		top_k = [(None, float('inf'))]*k
-
-		for c in self.children:
+		for c in self.children: 		# For all children of this V_Node:
 			#print(c, '->', top_k)
-			dist = abs(c.val - val)
-			if dist < top_k[-1][1]:
-				top_k[-1] = (c, dist)
-				top_k = sorted(top_k, key=lambda x: x[1], reverse=False)
-		return [x for x in top_k if x[1] < float('inf')]
+			dist = abs(c.val - val)		# Distance between the child and given node value.
+			if dist < top_k[-1][1]:		# If this distance is less than the k-th row's value...
+				top_k[-1] = (c, dist)	# Store this child and the distance to it.
+				top_k = sorted(top_k, key=lambda x: x[1], reverse=False) # Sort the k into increasing order.
+		return [x for x in top_k if x[1] < float('inf')] # Return the k (or fewer) closest children.
 
 	def insert(self, val):
 		"""
@@ -58,12 +61,15 @@ class V_Node:
 		return str(self.val) + ':' + str(self.data)
 
 def load_from_csv(filepath):
+	# Read in vertices.csv, which has format nodeID,theta1,theta2,theta3,x,y,z.
 	vertices = pd.read_csv(filepath)
 
-	root = V_Node(float('inf'), None, None)
+	root = V_Node(float('inf'), None, None) # Root of our tree.
 
 	for index, row in vertices.iterrows():
 		#print('-'*20,index, '-'*20)
+
+		# Store what will be the new V_Nodes' x,y,z, and theta1,theta2,theta3.
 		x,y,z = row['x'], row['y'], row['z']
 		thetas = (row['theta1'], row['theta2'], row['theta3'])
 
@@ -133,15 +139,12 @@ def main():
 	graph = Graph("robot arm")
 	graph.initialize(verticesDF)
 	graph.build_graph()
-	
 
 	root = load_from_csv('vertices.csv')
 	print('finished tree')
 	# root.preorder()
 	# print(root.countnodes())
 	# print(root.children)
-
-
 	#RUN
 
 	v = tree_lookup(root, -2, -2, 8, 10)
@@ -163,7 +166,7 @@ def main():
 	for p in path:
 		print(p)
 
-	x, x_prev, gx_prev = 0, 0, 0 
+	x, x_prev, gx_prev = 0, 0, 0
 	y, y_prev, gy_prev = 0, 0, 0
 	z, z_prev, gz_prev = 0, 0, 0
 	p_node = tree_lookup(root, x, y, z, k=10)
@@ -184,7 +187,6 @@ def main():
 		c_nodestr = 'nodeID+{}+{}+{}'.format(c_thetas[0], c_thetas[1], c_thetas[2])
 
 		path = graph.dfs(graph.id_map[p_nodestr], graph.id_map[c_nodestr])
-
 
 		print('Node1=', nodestr)
 		print('Node2=', nodestr2)
